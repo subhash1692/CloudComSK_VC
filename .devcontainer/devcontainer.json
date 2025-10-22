@@ -1,0 +1,34 @@
+{
+  // Display name shown in VS Code's Remote Containers list.
+  "name": "azure-data-eng",
+  // Points VS Code to the Docker Compose file that builds this environment.
+  "dockerComposeFile": "docker-compose.yml",
+  // Tells VS Code which service from the compose file to attach to.
+  "service": "app",
+  // Mounts the local repo inside the container under a predictable folder name.
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  // Placeholder for extra devcontainer features (none needed right now).
+  "features": {},
+  "customizations": {
+    "vscode": {
+      // Installs the ChatGPT helper extension inside the container.
+      "extensions": ["OpenAI.chatgpt"]
+    },
+    "settings": {
+      // Keeps VS Code from nagging about recommended extensions in this container.
+      "extensions.ignoreRecommendations": true,
+      // Prevents VS Code Settings Sync from auto-installing personal settings here.
+      "settingsSync.enabled": false
+    }
+  },
+  // Run after the container provisions to simplify the shell prompt for everyone.
+  "postCreateCommand": [
+    "bash",
+    "-lc",
+    "printf 'unset PROMPT_COMMAND\nPS1=\"\\W \\$ \"\n' >> \"$HOME/.bashrc\""
+  ],
+  // Ensures files created in the container belong to the non-root vscode user.
+  "remoteUser": "vscode",
+  // Starts the main service defined in docker-compose so the app is ready to use.
+  "runServices": ["app"]
+}
